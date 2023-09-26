@@ -8,31 +8,62 @@
 import SwiftUI
 
 
-struct ContentView: View {
+struct ContentView: View { 
+    
     @State var steps = Bathtask.Bathtasks
     
+    @State var isBathTasksViewOn = false
+
+    func showBathTasksView() {
+        isBathTasksViewOn.toggle()
+    }
+    
     var body: some View {
-        List($steps) { $bathtask in
-            HStack {
-                Section {
-                    Image(systemName: bathtask.isCompleted
-                          ? "checkmark.circle.fill"
-                          : "circle")
-                    .imageScale(.large)
-                    .foregroundColor(.accentColor)
-                    .onTapGesture {
-                        bathtask.isCompleted.toggle()
+        List() {
+                ForEach($steps) { $bathtask in
+                    HStack {
+                        Image(systemName: bathtask.isCompleted
+                              ? "checkmark.circle.fill"
+                              : "circle")
+                        .imageScale(.large)
+                        .foregroundColor(.accentColor)
+                        .onTapGesture {
+                            bathtask.isCompleted.toggle()
+                        }
+                        Text(bathtask.title)
                     }
-                    Text(bathtask.message)
                 }
+                .onDelete { indexSet in
+                steps.remove(atOffsets: indexSet)
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                Button(action: showBathTasksView) {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                        Text("New Mission to take a bath")
+                    }
+                }
+            }
+            
+        }
+        .sheet(isPresented: $isBathTasksViewOn) {
+            BathTasksView { bathtask in
+                steps.append(bathtask)
+            }
+            }
+        .background(Image("ratimbum-mouse").resizable())
         .background(Color(red: 0.9333333333333333, green: 0.9058823529411765, blue: 0.5568627450980392))
         .scrollContentBackground(.hidden)
+        }
     }
-}
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        NavigationStack {
+            ContentView()
+                .navigationTitle("Bath To-Do List")
+        }
+        
     }
 }
