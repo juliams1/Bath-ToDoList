@@ -30,7 +30,7 @@ struct ContentView: View {
                         .onTapGesture {
                             bathtask.isCompleted.toggle()
                         }
-                        Text(bathtask.title)
+                        TextField("", text: $bathtask.title)
                     }
                 }
                 .onDelete { indexSet in
@@ -42,7 +42,7 @@ struct ContentView: View {
                 Button(action: showBathTasksView) {
                     HStack {
                         Image(systemName: "plus.circle.fill")
-                        Text("New Mission to take a bath")
+                        Text("New Mission for your bath")
                     }
                 }
             }
