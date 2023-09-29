@@ -21,25 +21,32 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            List() {
-                ForEach($steps) { $bathtask in
-                    HStack {
-                        Image(systemName: bathtask.isCompleted
-                              ? "checkmark.circle.fill"
-                              : "circle")
-                        .imageScale(.large)
-                        .foregroundColor(.accentColor)
-                        .onTapGesture {
-                            bathtask.isCompleted.toggle()
+            ZStack {
+                Image("ratimbum-mouse")
+                    .resizable()
+                    .offset(x: -55)
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
+                List() {
+                    ForEach($steps) { $bathtask in
+                        HStack {
+                            Image(systemName: bathtask.isCompleted
+                                  ? "checkmark.circle.fill"
+                                  : "circle")
+                            .imageScale(.large)
+                            .foregroundColor(.accentColor)
+                            .onTapGesture {
+                                bathtask.isCompleted.toggle()
+                            }
+                            TextField("", text: $bathtask.title)
                         }
-                        TextField("", text: $bathtask.title)
+                    }
+                    .onDelete { indexSet in
+                        steps.remove(atOffsets: indexSet)
                     }
                 }
-                .onDelete { indexSet in
-                    steps.remove(atOffsets: indexSet)
-                }
+                .navigationTitle("Bath To-Do List")
             }
-            .navigationTitle("Bath To-Do List")
             
         }
         
@@ -59,8 +66,6 @@ struct ContentView: View {
                 steps.append(bathtask)
             }
         }
-        .background(Image("ratimbum-mouse").resizable())
-        .background(Image("background-mouse"))
         .scrollContentBackground(.hidden)
     }
 }
