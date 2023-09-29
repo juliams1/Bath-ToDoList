@@ -8,18 +8,20 @@
 import SwiftUI
 
 
-struct ContentView: View { 
+struct ContentView: View {
+    
+    
     
     @State var steps = Bathtask.Bathtasks
-    
     @State var isBathTasksViewOn = false
-
+    
     func showBathTasksView() {
         isBathTasksViewOn.toggle()
     }
     
     var body: some View {
-        List() {
+        NavigationStack {
+            List() {
                 ForEach($steps) { $bathtask in
                     HStack {
                         Image(systemName: bathtask.isCompleted
@@ -34,9 +36,13 @@ struct ContentView: View {
                     }
                 }
                 .onDelete { indexSet in
-                steps.remove(atOffsets: indexSet)
+                    steps.remove(atOffsets: indexSet)
+                }
             }
+            .navigationTitle("Bath To-Do List")
+            
         }
+        
         .toolbar {
             ToolbarItem(placement: .bottomBar) {
                 Button(action: showBathTasksView) {
@@ -52,18 +58,15 @@ struct ContentView: View {
             BathTasksView { bathtask in
                 steps.append(bathtask)
             }
-            }
-        .background(Image("ratimbum-mouse").resizable())
-        .background(Color(red: 0.9333333333333333, green: 0.9058823529411765, blue: 0.5568627450980392))
-        .scrollContentBackground(.hidden)
         }
+        .background(Image("ratimbum-mouse").resizable())
+        .background(Image("background-mouse"))
+        .scrollContentBackground(.hidden)
     }
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationStack {
-            ContentView()
-                .navigationTitle("Bath To-Do List")
-        }
-        
+        ContentView()
     }
 }
